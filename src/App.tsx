@@ -14,6 +14,7 @@ import Customers from "./pages/admin/Customers";
 import CustomerDetails from "./pages/admin/CustomerDetails";
 import Layout from "./components/Layout";
 import Appearance from "@/pages/admin/Appearance";
+import Reviews from "./pages/admin/Reviews";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="customers" element={<Customers />} />
             <Route path="customers/:id" element={<CustomerDetails />} />
             <Route path="appearance" element={<Appearance />} />
+            <Route path="reviews" element={<Reviews />} />
           </Route>
         </Routes>
       </BrowserRouter>

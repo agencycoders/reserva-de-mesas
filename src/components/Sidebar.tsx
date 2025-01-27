@@ -7,6 +7,7 @@ import {
   LogOut,
   Users,
   Palette,
+  Star
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -31,6 +32,11 @@ const Sidebar = () => {
           label: "Clientes",
           icon: Users,
           href: "/admin/customers",
+        },
+        {
+          label: "Avaliações",
+          icon: Star,
+          href: "/admin/reviews",
         },
       ],
     },
