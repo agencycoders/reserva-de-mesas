@@ -73,49 +73,49 @@ select {
   /* Animações de flutuação */
   @keyframes float {
     0% {
-      transform: translateY(0px);
+      transform: translateY(0px) translateX(0px);
     }
     50% {
-      transform: translateY(-10px);
+      transform: translateY(-20px) translateX(10px);
     }
     100% {
-      transform: translateY(0px);
+      transform: translateY(0px) translateX(0px);
     }
   }
 
   @keyframes float-slow {
     0% {
-      transform: translateY(0px) rotate(0deg);
+      transform: translateY(0px) translateX(0px);
     }
     50% {
-      transform: translateY(-15px) rotate(5deg);
+      transform: translateY(20px) translateX(-10px);
     }
     100% {
-      transform: translateY(0px) rotate(0deg);
+      transform: translateY(0px) translateX(0px);
     }
   }
 
   @keyframes float-slower {
     0% {
-      transform: translateY(0px) rotate(0deg);
+      transform: translateY(0px) translateX(0px);
     }
     50% {
-      transform: translateY(-20px) rotate(-5deg);
+      transform: translateY(-15px) translateX(-15px);
     }
     100% {
-      transform: translateY(0px) rotate(0deg);
+      transform: translateY(0px) translateX(0px);
     }
   }
 
   .animate-float {
-    animation: float 3s ease-in-out infinite;
+    animation: float 6s ease-in-out infinite;
   }
 
   .animate-float-slow {
-    animation: float-slow 6s ease-in-out infinite;
+    animation: float-slow 8s ease-in-out infinite;
   }
 
   .animate-float-slower {
-    animation: float-slower 8s ease-in-out infinite;
+    animation: float-slower 10s ease-in-out infinite;
   }
 }

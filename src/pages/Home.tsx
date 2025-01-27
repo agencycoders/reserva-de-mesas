@@ -70,6 +70,21 @@ const Home = () => {
         {/* Animated Dots Grid */}
         <div className="absolute inset-0 bg-[radial-gradient(#ffffff33_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
 
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-[15%] w-24 h-24 bg-primary/30 rounded-full blur-3xl animate-float opacity-75"></div>
+        <div className="absolute bottom-20 right-[15%] w-32 h-32 bg-blue-500/30 rounded-full blur-3xl animate-float-slow opacity-75"></div>
+        <div className="absolute top-1/3 right-[25%] w-16 h-16 bg-indigo-500/30 rounded-full blur-2xl animate-float-slower opacity-75"></div>
+        <div className="absolute bottom-1/3 left-[25%] w-20 h-20 bg-violet-500/30 rounded-full blur-2xl animate-float opacity-75"></div>
+
+        {/* Neon Lines */}
+        <div className="absolute top-[20%] left-0 w-[40%] h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent rotate-[-45deg] blur-sm"></div>
+        <div className="absolute bottom-[20%] right-0 w-[40%] h-[1px] bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rotate-[45deg] blur-sm"></div>
+
+        {/* Glowing Orbs */}
+        <div className="absolute top-1/4 left-[10%] w-2 h-2 bg-primary rounded-full shadow-[0_0_10px_4px_rgba(79,70,229,0.3)] animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-[10%] w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_10px_4px_rgba(59,130,246,0.3)] animate-pulse"></div>
+        <div className="absolute top-2/3 right-[30%] w-2 h-2 bg-violet-500 rounded-full shadow-[0_0_10px_4px_rgba(139,92,246,0.3)] animate-pulse"></div>
+
         <div className="container relative mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <div className="mb-8 inline-block rounded-full bg-white/10 px-4 py-2 backdrop-blur-sm">
@@ -215,8 +230,8 @@ const Home = () => {
         <div className="absolute inset-0 bg-[radial-gradient(#4f46e533_1px,transparent_1px)] [background-size:16px_16px] opacity-50"></div>
         
         <div className="container relative mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-primary to-primary/70 bg-clip-text text-transparent">
+          <div className="text-center max-w-4xl mx-auto mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-primary to-primary/70 bg-clip-text text-transparent whitespace-nowrap">
               Planos Flexíveis para seu Negócio
             </h2>
             <p className="text-xl text-gray-600 leading-relaxed">
