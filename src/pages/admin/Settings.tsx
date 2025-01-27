@@ -12,7 +12,6 @@ const Settings = () => {
   const [settings, setSettings] = useState({
     restaurantName: "",
     logo: "",
-    primaryColor: "#8B5CF6",
     openingTime: "11:00",
     closingTime: "23:00",
     maxGuests: "8",
@@ -97,18 +96,6 @@ Equipe {restaurante}`,
                     value={settings.address}
                     onChange={handleChange}
                     placeholder="Digite a morada completa do restaurante"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="primaryColor">Cor Principal</Label>
-                  <Input
-                    type="color"
-                    id="primaryColor"
-                    name="primaryColor"
-                    value={settings.primaryColor}
-                    onChange={handleChange}
-                    className="h-12 w-full"
                   />
                 </div>
 
