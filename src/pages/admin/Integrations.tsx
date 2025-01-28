@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { Copy, Facebook, Instagram, Globe, Info, ExternalLink } from "lucide-react";
+import { Copy, Facebook, Instagram, Globe, Info, ExternalLink, CreditCard } from "lucide-react";
 import { useState } from "react";
 import {
   Table,
@@ -17,8 +17,10 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
 
-// Função para converter texto em slug
 const generateSlug = (text: string): string => {
   return text
     .toLowerCase() // Converter para minúsculas
@@ -32,12 +34,14 @@ const generateSlug = (text: string): string => {
 
 const Integrations = () => {
   const { toast } = useToast();
-  // Exemplo de nome de restaurante convertido para slug
   const restaurantName = "Restaurante Sabor & Arte";
-  const restaurantId = generateSlug(restaurantName); // Resultado: "restaurante-sabor-arte"
+  const restaurantId = generateSlug(restaurantName);
   const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [stripeConfig, setStripeConfig] = useState({
+    publishableKey: "",
+    priceId: "",
+  });
 
-  // Usar o domínio atual da aplicação
   const currentDomain = window.location.origin;
   const bookingFormUrl = `${currentDomain}/booking/${restaurantId}`;
 
@@ -66,6 +70,12 @@ const Integrations = () => {
       status: "Desconectado",
       icon: Instagram,
       lastSync: "-",
+    },
+    {
+      name: "Stripe",
+      status: "Desconectado",
+      icon: CreditCard,
+      lastSync: "-",
     }
   ]);
 
@@ -75,41 +85,38 @@ const Integrations = () => {
     const isConnecting = integration?.status !== "Conectado";
 
     try {
-      if (isConnecting) {
-        // Simular chamada à API de autenticação da rede social
-        await new Promise(resolve => setTimeout(resolve, 1500));
+      if (platform === "Stripe") {
+        // Validar as chaves do Stripe antes de marcar como conectado
+        if (!stripeConfig.publishableKey || !stripeConfig.priceId) {
+          throw new Error("Preencha todas as informações do Stripe");
+        }
         
-        // Atualizar o estado da integração
-        setIntegrations(prev => prev.map(i => 
-          i.name === platform 
-            ? { ...i, status: "Conectado", lastSync: "Agora" }
-            : i
-        ));
-
-        toast({
-          title: "Plataforma conectada!",
-          description: `${platform} foi conectado com sucesso.`,
+        // Salvar as configurações do Stripe
+        const { error } = await supabase.functions.invoke('save-stripe-config', {
+          body: { 
+            publishableKey: stripeConfig.publishableKey,
+            priceId: stripeConfig.priceId
+          }
         });
-      } else {
-        // Simular desconexão
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Atualizar o estado da integração
-        setIntegrations(prev => prev.map(i => 
-          i.name === platform 
-            ? { ...i, status: "Desconectado", lastSync: "-" }
-            : i
-        ));
 
-        toast({
-          title: "Plataforma desconectada",
-          description: `${platform} foi desconectado com sucesso.`,
-        });
+        if (error) throw error;
       }
+
+      // Atualizar o estado da integração
+      setIntegrations(prev => prev.map(i => 
+        i.name === platform 
+          ? { ...i, status: isConnecting ? "Conectado" : "Desconectado", lastSync: isConnecting ? "Agora" : "-" }
+          : i
+      ));
+
+      toast({
+        title: isConnecting ? "Plataforma conectada!" : "Plataforma desconectada",
+        description: `${platform} foi ${isConnecting ? 'conectado' : 'desconectado'} com sucesso.`,
+      });
     } catch (error) {
       toast({
         title: "Erro na conexão",
-        description: `Não foi possível ${isConnecting ? 'conectar' : 'desconectar'} o ${platform}. Tente novamente.`,
+        description: error.message || `Não foi possível ${isConnecting ? 'conectar' : 'desconectar'} o ${platform}. Tente novamente.`,
         variant: "destructive",
       });
     } finally {
@@ -172,6 +179,34 @@ const Integrations = () => {
                       </TableCell>
                       <TableCell>{integration.lastSync}</TableCell>
                       <TableCell className="text-right">
+                        {integration.name === "Stripe" && integration.status !== "Conectado" && (
+                          <div className="space-y-4 mb-4">
+                            <div>
+                              <Label htmlFor="publishableKey">Chave Publicável</Label>
+                              <Input
+                                id="publishableKey"
+                                value={stripeConfig.publishableKey}
+                                onChange={(e) => setStripeConfig(prev => ({
+                                  ...prev,
+                                  publishableKey: e.target.value
+                                }))}
+                                placeholder="pk_test_..."
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="priceId">ID do Preço</Label>
+                              <Input
+                                id="priceId"
+                                value={stripeConfig.priceId}
+                                onChange={(e) => setStripeConfig(prev => ({
+                                  ...prev,
+                                  priceId: e.target.value
+                                }))}
+                                placeholder="price_..."
+                              />
+                            </div>
+                          </div>
+                        )}
                         <Button
                           variant={
                             integration.status === "Conectado"
