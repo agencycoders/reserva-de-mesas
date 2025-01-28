@@ -20,7 +20,7 @@ const features = [
   {
     icon: Calendar,
     title: "Sistema de Reservas Intuitivo",
-    description: "Gerencie suas reservas de forma simples e eficiente. Confirmações automáticas e lembretes para seus clientes."
+    description: "Faça a gestão das suas reservas de forma simples e eficiente. Confirmações automáticas e lembretes para os seus clientes."
   },
   {
     icon: Users,
@@ -30,12 +30,12 @@ const features = [
   {
     icon: BarChart3,
     title: "Análises e Relatórios",
-    description: "Dashboards detalhados com métricas importantes do seu negócio, taxa de ocupação e tendências."
+    description: "Painéis detalhados com métricas importantes do seu negócio, taxa de ocupação e tendências."
   },
   {
     icon: Share2,
-    title: "Integrações com Redes Sociais",
-    description: "Conecte-se com Facebook e Instagram para permitir reservas diretas das redes sociais."
+    title: "Integração com Redes Sociais",
+    description: "Ligue-se ao Facebook e Instagram para permitir reservas diretas das redes sociais."
   },
   {
     icon: Bell,
@@ -44,16 +44,16 @@ const features = [
   },
   {
     icon: Smartphone,
-    title: "Acesso Mobile",
-    description: "Gerencie seu restaurante de qualquer lugar através do nosso sistema responsivo."
+    title: "Acesso Móvel",
+    description: "Faça a gestão do seu restaurante em qualquer lugar através do nosso sistema responsivo."
   }
 ];
 
 const benefits = [
   "Aumente a eficiência operacional",
-  "Reduza no-shows com confirmações automáticas",
+  "Reduza faltas com confirmações automáticas",
   "Melhore a experiência do cliente",
-  "Economize tempo na gestão de reservas",
+  "Poupe tempo na gestão de reservas",
   "Tome decisões baseadas em dados",
   "Fidelize mais clientes"
 ];
@@ -93,12 +93,26 @@ const Home = () => {
               </span>
             </div>
 
-            <h1 className="font-playfair text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
-              Simplifique a Gestão de<br />Reservas do seu Restaurante
-            </h1>
+            <div className="relative">
+              <h1 className="font-playfair text-5xl md:text-7xl font-bold mb-8">
+                <span className="relative inline-block">
+                  <span className="absolute inset-0 bg-gradient-to-r from-primary via-primary to-primary/70 blur-2xl opacity-30"></span>
+                  <span className="relative bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
+                    Simplifique a Gestão de
+                  </span>
+                </span>
+                <br />
+                <span className="relative inline-block mt-2">
+                  <span className="absolute inset-0 bg-gradient-to-r from-primary via-primary to-primary/70 blur-2xl opacity-30"></span>
+                  <span className="relative bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
+                    Reservas do seu Restaurante
+                  </span>
+                </span>
+              </h1>
+            </div>
 
             <p className="text-xl mb-12 text-white/80 leading-relaxed max-w-2xl mx-auto">
-              Automatize suas reservas, evite conflitos de horários e ofereça uma experiência excepcional aos seus clientes. Tudo em uma única plataforma.
+              Automatize as suas reservas, evite conflitos de horários e ofereça uma experiência excepcional aos seus clientes. Tudo numa única plataforma.
             </p>
 
             {/* Stats Grid */}
@@ -108,7 +122,7 @@ const Home = () => {
                   +5.000
                 </div>
                 <div className="text-sm text-white/70 mt-2">
-                  Reservas Gerenciadas
+                  Reservas Geridas
                 </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
@@ -116,7 +130,7 @@ const Home = () => {
                   -70%
                 </div>
                 <div className="text-sm text-white/70 mt-2">
-                  Menos No-shows
+                  Menos Faltas
                 </div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
@@ -369,4 +383,4 @@ const Home = () => {
   );
 };
 
-export default Home; 
+export default Home;
