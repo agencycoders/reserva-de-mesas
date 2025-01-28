@@ -86,12 +86,10 @@ const Integrations = () => {
 
     try {
       if (platform === "Stripe") {
-        // Validar as chaves do Stripe antes de marcar como conectado
         if (!stripeConfig.publishableKey || !stripeConfig.priceId) {
           throw new Error("Preencha todas as informações do Stripe");
         }
         
-        // Salvar as configurações do Stripe
         const { error } = await supabase.functions.invoke('save-stripe-config', {
           body: { 
             publishableKey: stripeConfig.publishableKey,
@@ -102,7 +100,6 @@ const Integrations = () => {
         if (error) throw error;
       }
 
-      // Atualizar o estado da integração
       setIntegrations(prev => prev.map(i => 
         i.name === platform 
           ? { ...i, status: isConnecting ? "Conectado" : "Desconectado", lastSync: isConnecting ? "Agora" : "-" }
@@ -181,29 +178,41 @@ const Integrations = () => {
                       <TableCell className="text-right">
                         {integration.name === "Stripe" && integration.status !== "Conectado" && (
                           <div className="space-y-4 mb-4">
-                            <div>
-                              <Label htmlFor="publishableKey">Chave Publicável</Label>
-                              <Input
-                                id="publishableKey"
-                                value={stripeConfig.publishableKey}
-                                onChange={(e) => setStripeConfig(prev => ({
-                                  ...prev,
-                                  publishableKey: e.target.value
-                                }))}
-                                placeholder="pk_test_..."
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor="priceId">ID do Preço</Label>
-                              <Input
-                                id="priceId"
-                                value={stripeConfig.priceId}
-                                onChange={(e) => setStripeConfig(prev => ({
-                                  ...prev,
-                                  priceId: e.target.value
-                                }))}
-                                placeholder="price_..."
-                              />
+                            <div className="grid grid-cols-1 gap-4 max-w-xl mx-auto">
+                              <div>
+                                <Label htmlFor="publishableKey" className="text-sm font-medium">
+                                  Chave Publicável
+                                </Label>
+                                <div className="mt-1">
+                                  <Input
+                                    id="publishableKey"
+                                    value={stripeConfig.publishableKey}
+                                    onChange={(e) => setStripeConfig(prev => ({
+                                      ...prev,
+                                      publishableKey: e.target.value
+                                    }))}
+                                    placeholder="pk_test_..."
+                                    className="w-full"
+                                  />
+                                </div>
+                              </div>
+                              <div>
+                                <Label htmlFor="priceId" className="text-sm font-medium">
+                                  ID do Preço
+                                </Label>
+                                <div className="mt-1">
+                                  <Input
+                                    id="priceId"
+                                    value={stripeConfig.priceId}
+                                    onChange={(e) => setStripeConfig(prev => ({
+                                      ...prev,
+                                      priceId: e.target.value
+                                    }))}
+                                    placeholder="price_..."
+                                    className="w-full"
+                                  />
+                                </div>
+                              </div>
                             </div>
                           </div>
                         )}
@@ -216,6 +225,7 @@ const Integrations = () => {
                           size="sm"
                           onClick={() => handleConnection(integration.name)}
                           disabled={isLoading === integration.name}
+                          className="w-32"
                         >
                           {isLoading === integration.name ? (
                             <span className="flex items-center gap-2">
