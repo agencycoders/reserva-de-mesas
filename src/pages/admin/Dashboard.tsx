@@ -63,7 +63,7 @@ const Dashboard = () => {
 
   const mostPopularHour = Object.entries(popularHour).length > 0
     ? Object.entries(popularHour).reduce((a, b) => (b[1] > a[1] ? b : a))[0]
-    : "N/A";
+    : "N/D";
 
   // Dados para o gráfico com valor inicial
   const weeklyData = reservations?.reduce((acc: any[], curr) => {
@@ -110,16 +110,16 @@ const Dashboard = () => {
             <BreadcrumbItem>
               <BreadcrumbLink href="/admin" className="flex items-center gap-2">
                 <Home className="w-4 h-4" />
-                Admin
+                Administração
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Dashboard</BreadcrumbPage>
+              <BreadcrumbPage>Painel</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
-        <h1 className="text-3xl font-semibold">Dashboard</h1>
+        <h1 className="text-3xl font-semibold">Painel</h1>
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -36,7 +36,7 @@ const Index = () => {
     e.preventDefault();
     toast({
       title: "Reserva recebida!",
-      description: "Em breve você receberá um email de confirmação.",
+      description: "Em breve receberá um email de confirmação.",
     });
     setFormData({
       name: "",
@@ -69,14 +69,14 @@ const Index = () => {
           <div className="text-center mb-8">
             <img
               src="/placeholder.svg"
-              alt="Logo do Restaurante"
+              alt="Logótipo do Restaurante"
               className="h-24 mx-auto mb-6 fade-in"
             />
             <h1 className="text-3xl font-playfair font-semibold text-text mb-2">
-              Reserve sua Mesa
+              Reserve a sua Mesa
             </h1>
             <p className="text-muted-foreground">
-              Faça sua reserva online e receba confirmação imediata
+              Faça a sua reserva online e receba confirmação imediata
             </p>
           </div>
 
@@ -90,7 +90,7 @@ const Index = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  placeholder="Digite seu nome completo"
+                  placeholder="Digite o seu nome completo"
                 />
               </div>
 

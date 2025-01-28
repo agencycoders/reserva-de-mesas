@@ -46,7 +46,7 @@ const CustomerDetails = () => {
   });
 
   if (isLoadingCustomer || isLoadingReservations) {
-    return <div>Carregando...</div>;
+    return <div>A carregar...</div>;
   }
 
   const totalReservations = reservations?.length || 0;
@@ -98,7 +98,7 @@ const CustomerDetails = () => {
               <TableHead>Data</TableHead>
               <TableHead>Horário</TableHead>
               <TableHead>Pessoas</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>Estado</TableHead>
               <TableHead>Compareceu</TableHead>
             </TableRow>
           </TableHeader>

@@ -39,7 +39,7 @@ const Customers = () => {
   });
 
   if (isLoading) {
-    return <div>Carregando...</div>;
+    return <div>A carregar...</div>;
   }
 
   return (
