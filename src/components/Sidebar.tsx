@@ -8,7 +8,8 @@ import {
   Users,
   Palette,
   Star,
-  LayoutGrid
+  LayoutGrid,
+  CalendarClock
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -43,6 +44,11 @@ const Sidebar = () => {
           label: "Layout das Mesas",
           icon: LayoutGrid,
           href: "/admin/table-layout",
+        },
+        {
+          label: "Reservas do Dia",
+          icon: CalendarClock,
+          href: "/admin/daily-layout",
         },
       ],
     },

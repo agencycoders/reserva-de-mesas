@@ -16,6 +16,7 @@ import Layout from "./components/Layout";
 import Appearance from "@/pages/admin/Appearance";
 import Reviews from "./pages/admin/Reviews";
 import TableLayout from "./pages/admin/TableLayout";
+import DailyLayout from "./pages/admin/DailyLayout";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="appearance" element={<Appearance />} />
             <Route path="reviews" element={<Reviews />} />
             <Route path="table-layout" element={<TableLayout />} />
+            <Route path="daily-layout" element={<DailyLayout />} />
           </Route>
         </Routes>
       </BrowserRouter>
