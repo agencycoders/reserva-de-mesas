@@ -1,6 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Canvas as FabricCanvas, Circle, Rect } from "fabric";
-import { Home, Save, Trash, RotateCcw, Square, Circle as CircleIcon } from "lucide-react";
+import { 
+  Home, 
+  Save, 
+  Trash, 
+  RotateCcw, 
+  Square, 
+  Circle as CircleIcon,
+  Clock,
+  User,
+  Users
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,20 +29,24 @@ import {
 } from "@/components/ui/breadcrumb";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 
-interface TableElement {
+interface Reservation {
   id: string;
-  shape: "circle" | "rectangle";
-  position: { x: number; y: number };
-  rotation: number;
-  name: string;
-  capacity: number;
+  customer_name: string;
+  date: string;
+  party_size: number;
+  status: string;
 }
 
 const TableLayout = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [fabricCanvas, setFabricCanvas] = useState<FabricCanvas | null>(null);
   const [selectedElement, setSelectedElement] = useState<any>(null);
+  const [reservations, setReservations] = useState<Reservation[]>([]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -53,10 +67,33 @@ const TableLayout = () => {
 
     setFabricCanvas(canvas);
 
+    // Carregar reservas do dia
+    loadTodayReservations();
+
     return () => {
       canvas.dispose();
     };
   }, []);
+
+  const loadTodayReservations = async () => {
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0)).toISOString();
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999)).toISOString();
+
+    const { data, error } = await supabase
+      .from('reservations')
+      .select('*')
+      .gte('date', startOfDay)
+      .lte('date', endOfDay)
+      .order('date', { ascending: true });
+
+    if (error) {
+      toast.error("Erro ao carregar reservas");
+      return;
+    }
+
+    setReservations(data);
+  };
 
   const addTable = async (shape: "circle" | "rectangle") => {
     if (!fabricCanvas) return;
@@ -89,7 +126,6 @@ const TableLayout = () => {
       toast.success("Mesa quadrada adicionada");
     }
 
-    // Adicionar dados personalizados ao elemento
     element.set('customProps', {
       type: 'table',
       shape: shape,
@@ -117,7 +153,6 @@ const TableLayout = () => {
     if (!fabricCanvas) return;
 
     try {
-      // Criar um novo layout
       const { data: layout, error: layoutError } = await supabase
         .from('table_layouts')
         .insert([
@@ -128,7 +163,6 @@ const TableLayout = () => {
 
       if (layoutError) throw layoutError;
 
-      // Salvar cada elemento do canvas
       const elements = fabricCanvas.getObjects();
       const elementPromises = elements.map(obj => {
         const customProps = obj.get('customProps');
@@ -178,7 +212,50 @@ const TableLayout = () => {
         <h1 className="text-3xl font-semibold">Layout das Mesas</h1>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6">
+        {/* Painel de Reservas */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Reservas do Dia</CardTitle>
+            <CardDescription>
+              {format(new Date(), "dd 'de' MMMM 'de' yyyy")}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ScrollArea className="h-[600px] pr-4">
+              <div className="space-y-4">
+                {reservations.map((reservation) => (
+                  <div
+                    key={reservation.id}
+                    className="p-4 rounded-lg border bg-card text-card-foreground shadow-sm"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <User className="w-4 h-4 text-muted-foreground" />
+                        <span className="font-medium">{reservation.customer_name}</span>
+                      </div>
+                      <Badge variant={reservation.status === 'confirmed' ? 'default' : 'secondary'}>
+                        {reservation.status === 'confirmed' ? 'Confirmada' : 'Pendente'}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+                        {format(new Date(reservation.date), 'HH:mm')}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Users className="w-4 h-4" />
+                        {reservation.party_size} pessoas
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+
+        {/* Layout Editor */}
         <div className="space-y-6">
           <Card>
             <CardHeader>
@@ -236,6 +313,7 @@ const TableLayout = () => {
                   <Trash className="w-4 h-4" />
                   Remover
                 </Button>
+                <Separator />
                 <Button
                   variant="default"
                   className="w-full justify-start gap-2"
@@ -247,21 +325,21 @@ const TableLayout = () => {
               </div>
             </CardContent>
           </Card>
-        </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Layout</CardTitle>
-            <CardDescription>
-              Clique e arraste os elementos para posicioná-los
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="border border-gray-200 rounded-lg overflow-hidden">
-              <canvas ref={canvasRef} />
-            </div>
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Layout</CardTitle>
+              <CardDescription>
+                Clique e arraste os elementos para posicioná-los
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="border border-gray-200 rounded-lg overflow-hidden">
+                <canvas ref={canvasRef} />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
