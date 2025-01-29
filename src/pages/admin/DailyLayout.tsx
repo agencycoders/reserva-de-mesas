@@ -37,18 +37,18 @@ const DailyLayout = () => {
     },
   });
 
-  // Fetch active table layout
+  // Fetch active table layout - Fixed to handle no results
   const { data: layouts, isLoading: isLoadingLayouts } = useQuery({
     queryKey: ["table-layouts"],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("table_layouts")
         .select("*")
-        .eq("is_active", true)
-        .single();
+        .eq("is_active", true);
 
       if (error) throw error;
-      return data as TableLayout;
+      // Return the first active layout or null if none exists
+      return (data && data.length > 0 ? data[0] : null) as TableLayout | null;
     },
   });
 
@@ -77,7 +77,10 @@ const DailyLayout = () => {
     try {
       const { error } = await supabase
         .from("reservations")
-        .update({ table_id: tableId })
+        .update({ 
+          table_id: tableId,
+          status: 'confirmed' 
+        })
         .eq("id", reservationId);
 
       if (error) throw error;

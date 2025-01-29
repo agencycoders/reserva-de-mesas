@@ -98,6 +98,7 @@ export type Database = {
           notes: string | null
           party_size: number
           status: string | null
+          table_id: string | null
         }
         Insert: {
           attendance_status?: string | null
@@ -110,6 +111,7 @@ export type Database = {
           notes?: string | null
           party_size: number
           status?: string | null
+          table_id?: string | null
         }
         Update: {
           attendance_status?: string | null
@@ -122,6 +124,7 @@ export type Database = {
           notes?: string | null
           party_size?: number
           status?: string | null
+          table_id?: string | null
         }
         Relationships: []
       }
