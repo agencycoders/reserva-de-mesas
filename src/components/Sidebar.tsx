@@ -7,7 +7,8 @@ import {
   LogOut,
   Users,
   Palette,
-  Star
+  Star,
+  LayoutGrid
 } from "lucide-react";
 
 const Sidebar = () => {
@@ -37,6 +38,11 @@ const Sidebar = () => {
           label: "Avaliações",
           icon: Star,
           href: "/admin/reviews",
+        },
+        {
+          label: "Layout das Mesas",
+          icon: LayoutGrid,
+          href: "/admin/table-layout",
         },
       ],
     },

@@ -9,6 +9,59 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      layout_elements: {
+        Row: {
+          capacity: number | null
+          created_at: string
+          element_type: string
+          height: number | null
+          id: string
+          layout_id: string | null
+          name: string | null
+          position_x: number
+          position_y: number
+          rotation: number | null
+          shape: string
+          width: number | null
+        }
+        Insert: {
+          capacity?: number | null
+          created_at?: string
+          element_type: string
+          height?: number | null
+          id?: string
+          layout_id?: string | null
+          name?: string | null
+          position_x: number
+          position_y: number
+          rotation?: number | null
+          shape: string
+          width?: number | null
+        }
+        Update: {
+          capacity?: number | null
+          created_at?: string
+          element_type?: string
+          height?: number | null
+          id?: string
+          layout_id?: string | null
+          name?: string | null
+          position_x?: number
+          position_y?: number
+          rotation?: number | null
+          shape?: string
+          width?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "layout_elements_layout_id_fkey"
+            columns: ["layout_id"]
+            isOneToOne: false
+            referencedRelation: "table_layouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -69,6 +122,30 @@ export type Database = {
           notes?: string | null
           party_size?: number
           status?: string | null
+        }
+        Relationships: []
+      }
+      table_layouts: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
         }
         Relationships: []
       }
