@@ -72,13 +72,15 @@ const Dashboard = () => {
       return data;
     },
     retry: 1,
-    onError: (error) => {
-      toast({
-        title: "Erro ao carregar reservas",
-        description: "Houve um problema ao carregar as reservas. Tente novamente mais tarde.",
-        variant: "destructive",
-      });
-    },
+    meta: {
+      onError: () => {
+        toast({
+          title: "Erro ao carregar reservas",
+          description: "Houve um problema ao carregar as reservas. Tente novamente mais tarde.",
+          variant: "destructive",
+        });
+      }
+    }
   });
 
   // Calcular estatísticas com verificações de null/undefined
