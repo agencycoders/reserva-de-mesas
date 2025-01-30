@@ -41,11 +41,6 @@ const Sidebar = () => {
           href: "/admin/reviews",
         },
         {
-          label: "Layout das Mesas",
-          icon: LayoutGrid,
-          href: "/admin/table-layout",
-        },
-        {
           label: "Reservas do Dia",
           icon: CalendarClock,
           href: "/admin/daily-layout",
@@ -59,6 +54,11 @@ const Sidebar = () => {
           label: "Aparência",
           icon: Palette,
           href: "/admin/appearance",
+        },
+        {
+          label: "Layout das Mesas",
+          icon: LayoutGrid,
+          href: "/admin/table-layout",
         },
         {
           label: "Integrações",
