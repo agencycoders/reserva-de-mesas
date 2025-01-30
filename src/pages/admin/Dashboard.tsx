@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -33,9 +34,30 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const { data: reservations, isLoading } = useQuery({
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast({
+          title: "Não autorizado",
+          description: "Faça login para acessar o painel",
+          variant: "destructive",
+        });
+        navigate("/admin/login");
+      }
+    };
+    checkAuth();
+  }, [navigate, toast]);
+
+  const { data: reservations, isLoading, error } = useQuery({
     queryKey: ["reservations"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -43,8 +65,19 @@ const Dashboard = () => {
         .select("*")
         .order("date", { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching reservations:", error);
+        throw error;
+      }
       return data;
+    },
+    retry: 1,
+    onError: (error) => {
+      toast({
+        title: "Erro ao carregar reservas",
+        description: "Houve um problema ao carregar as reservas. Tente novamente mais tarde.",
+        variant: "destructive",
+      });
     },
   });
 
@@ -101,6 +134,15 @@ const Dashboard = () => {
       </div>
     </Card>
   );
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[50vh] gap-4">
+        <p className="text-lg text-muted-foreground">Erro ao carregar dados</p>
+        <p className="text-sm text-muted-foreground">Tente novamente mais tarde</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
