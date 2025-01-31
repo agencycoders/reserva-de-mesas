@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Canvas as FabricCanvas, Circle, Rect } from "fabric";
-import { Home, Save, Trash, RotateCcw, Square, Circle as CircleIcon, MenuSquare, Flower2 } from "lucide-react";
+import { Home, Save, Trash, RotateCcw, Square, Circle as CircleIcon, MenuSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,7 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface TableElement {
   id: string;
-  shape: "circle" | "rectangle" | "counter" | "flowers";
+  shape: "circle" | "rectangle" | "counter";
   position: { x: number; y: number };
   rotation: number;
   name: string;
@@ -58,7 +58,7 @@ const TableLayout = () => {
     };
   }, []);
 
-  const addTable = async (shape: "circle" | "rectangle" | "counter" | "flowers") => {
+  const addTable = async (shape: "circle" | "rectangle" | "counter") => {
     if (!fabricCanvas) return;
 
     const commonProps = {
@@ -103,39 +103,6 @@ const TableLayout = () => {
       });
       fabricCanvas.add(element);
       toast.success("Balcão adicionado");
-    } else if (shape === "flowers") {
-      // Criar o círculo central da flor
-      const centerCircle = new Circle({
-        ...commonProps,
-        radius: 15,
-        fill: "#FF9EAA",
-        strokeWidth: 2,
-        stroke: "#FF8B98",
-      });
-
-      // Criar pétalas ao redor
-      const numPetals = 6;
-      const petalRadius = 12;
-      const distanceFromCenter = 15;
-
-      for (let i = 0; i < numPetals; i++) {
-        const angle = (i * 2 * Math.PI) / numPetals;
-        const petal = new Circle({
-          left: commonProps.left + distanceFromCenter * Math.cos(angle),
-          top: commonProps.top + distanceFromCenter * Math.sin(angle),
-          radius: petalRadius,
-          fill: "#FFD1DC",
-          strokeWidth: 1,
-          stroke: "#FFBFCD",
-          originX: 'center',
-          originY: 'center',
-        });
-        fabricCanvas.add(petal);
-      }
-
-      fabricCanvas.add(centerCircle);
-      element = centerCircle;
-      toast.success("Flores adicionadas");
     }
 
     // Adicionar dados personalizados ao elemento
@@ -143,10 +110,8 @@ const TableLayout = () => {
       type: shape === 'circle' || shape === 'rectangle' ? 'table' : shape,
       shape: shape,
       name: shape === 'counter' ? 'Balcão' : 
-            shape === 'flowers' ? 'Flores' : 
             `Mesa ${Math.floor(Math.random() * 100)}`,
-      capacity: shape === 'counter' ? 0 : 
-               shape === 'flowers' ? 0 : 4
+      capacity: shape === 'counter' ? 0 : 4
     });
 
     fabricCanvas.renderAll();
@@ -262,14 +227,6 @@ const TableLayout = () => {
                 >
                   <MenuSquare className="w-4 h-4" />
                   Balcão
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start gap-2"
-                  onClick={() => addTable("flowers")}
-                >
-                  <Flower2 className="w-4 h-4" />
-                  Área de Flores
                 </Button>
               </div>
             </CardContent>
