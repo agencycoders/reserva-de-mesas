@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Canvas as FabricCanvas, Circle, Rect } from "fabric";
-import { Home, Save, Trash, RotateCcw, Square, Circle as CircleIcon } from "lucide-react";
+import { Home, Save, Trash, RotateCcw, Square, Circle as CircleIcon, MenuSquare, Flower2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -22,7 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface TableElement {
   id: string;
-  shape: "circle" | "rectangle";
+  shape: "circle" | "rectangle" | "counter" | "flowers";
   position: { x: number; y: number };
   rotation: number;
   name: string;
@@ -58,15 +58,12 @@ const TableLayout = () => {
     };
   }, []);
 
-  const addTable = async (shape: "circle" | "rectangle") => {
+  const addTable = async (shape: "circle" | "rectangle" | "counter" | "flowers") => {
     if (!fabricCanvas) return;
 
     const commonProps = {
       left: 100,
       top: 100,
-      fill: "#e2e8f0",
-      strokeWidth: 2,
-      stroke: "#94a3b8",
       hasControls: true,
       hasBorders: true,
     };
@@ -76,25 +73,57 @@ const TableLayout = () => {
       element = new Circle({
         ...commonProps,
         radius: 30,
+        fill: "#e2e8f0",
+        strokeWidth: 2,
+        stroke: "#94a3b8",
       });
       fabricCanvas.add(element);
       toast.success("Mesa redonda adicionada");
-    } else {
+    } else if (shape === "rectangle") {
       element = new Rect({
         ...commonProps,
         width: 60,
         height: 60,
+        fill: "#e2e8f0",
+        strokeWidth: 2,
+        stroke: "#94a3b8",
       });
       fabricCanvas.add(element);
       toast.success("Mesa quadrada adicionada");
+    } else if (shape === "counter") {
+      element = new Rect({
+        ...commonProps,
+        width: 200,
+        height: 40,
+        fill: "#403E43",
+        strokeWidth: 2,
+        stroke: "#222222",
+        rx: 5,
+        ry: 5,
+      });
+      fabricCanvas.add(element);
+      toast.success("Balcão adicionado");
+    } else if (shape === "flowers") {
+      element = new Circle({
+        ...commonProps,
+        radius: 25,
+        fill: "#FDE1D3",
+        strokeWidth: 2,
+        stroke: "#FFDEE2",
+      });
+      fabricCanvas.add(element);
+      toast.success("Área de flores adicionada");
     }
 
     // Adicionar dados personalizados ao elemento
-    element.set('customProps', {
-      type: 'table',
+    element?.set('customProps', {
+      type: shape === 'circle' || shape === 'rectangle' ? 'table' : shape,
       shape: shape,
-      name: `Mesa ${Math.floor(Math.random() * 100)}`,
-      capacity: 4
+      name: shape === 'counter' ? 'Balcão' : 
+            shape === 'flowers' ? 'Flores' : 
+            `Mesa ${Math.floor(Math.random() * 100)}`,
+      capacity: shape === 'counter' ? 0 : 
+               shape === 'flowers' ? 0 : 4
     });
 
     fabricCanvas.renderAll();
@@ -117,7 +146,6 @@ const TableLayout = () => {
     if (!fabricCanvas) return;
 
     try {
-      // Criar um novo layout
       const { data: layout, error: layoutError } = await supabase
         .from('table_layouts')
         .insert([
@@ -128,7 +156,6 @@ const TableLayout = () => {
 
       if (layoutError) throw layoutError;
 
-      // Salvar cada elemento do canvas
       const elements = fabricCanvas.getObjects();
       const elementPromises = elements.map(obj => {
         const customProps = obj.get('customProps');
@@ -204,6 +231,22 @@ const TableLayout = () => {
                 >
                   <Square className="w-4 h-4" />
                   Mesa Quadrada
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                  onClick={() => addTable("counter")}
+                >
+                  <MenuSquare className="w-4 h-4" />
+                  Balcão
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start gap-2"
+                  onClick={() => addTable("flowers")}
+                >
+                  <Flower2 className="w-4 h-4" />
+                  Área de Flores
                 </Button>
               </div>
             </CardContent>
