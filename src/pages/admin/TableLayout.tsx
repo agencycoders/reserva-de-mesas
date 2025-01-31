@@ -104,15 +104,38 @@ const TableLayout = () => {
       fabricCanvas.add(element);
       toast.success("Balcão adicionado");
     } else if (shape === "flowers") {
-      element = new Circle({
+      // Criar o círculo central da flor
+      const centerCircle = new Circle({
         ...commonProps,
-        radius: 25,
-        fill: "#FDE1D3",
+        radius: 15,
+        fill: "#FF9EAA",
         strokeWidth: 2,
-        stroke: "#FFDEE2",
+        stroke: "#FF8B98",
       });
-      fabricCanvas.add(element);
-      toast.success("Área de flores adicionada");
+
+      // Criar pétalas ao redor
+      const numPetals = 6;
+      const petalRadius = 12;
+      const distanceFromCenter = 15;
+
+      for (let i = 0; i < numPetals; i++) {
+        const angle = (i * 2 * Math.PI) / numPetals;
+        const petal = new Circle({
+          left: commonProps.left + distanceFromCenter * Math.cos(angle),
+          top: commonProps.top + distanceFromCenter * Math.sin(angle),
+          radius: petalRadius,
+          fill: "#FFD1DC",
+          strokeWidth: 1,
+          stroke: "#FFBFCD",
+          originX: 'center',
+          originY: 'center',
+        });
+        fabricCanvas.add(petal);
+      }
+
+      fabricCanvas.add(centerCircle);
+      element = centerCircle;
+      toast.success("Flores adicionadas");
     }
 
     // Adicionar dados personalizados ao elemento
